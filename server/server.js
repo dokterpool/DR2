@@ -1,10 +1,8 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
 const helmet = require('helmet');
 const cors = require('cors');
 const compression = require('compression');
@@ -61,33 +59,28 @@ app.use('/js', cacheControl(86400), express.static(path.join(__dirname, '../js')
 app.use('/uploads', cacheControl(604800), express.static(path.join(__dirname, '../uploads')));
 
 // Database connection
-const dbPath = path.join(__dirname, '../database/database.sqlite');
-const db = new sqlite3.Database(dbPath, (err) => {
-    if (err) {
-        console.error('Error connecting to database:', err);
-    } else {
-        console.log('Connected to SQLite database');
-    }
-});
+const db = require('./db');
 
 // Multer configuration for file uploads
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const uploadType = req.params.type || 'general';
-        const uploadPath = path.join(__dirname, '../uploads', uploadType);
-        if (!fs.existsSync(uploadPath)) {
-            fs.mkdirSync(uploadPath, { recursive: true });
-        }
-        cb(null, uploadPath);
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
-    }
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+const storage = new CloudinaryStorage({
+    cloudinary,
+    params: async (req, file) => ({
+        folder: `dokterpool/${req.params.type || 'general'}` ,
+        allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp']
+    })
 });
 
 const upload = multer({
-    storage: storage,
+    storage,
     limits: { fileSize: 10 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         const allowedTypes = /jpeg|jpg|png|gif|webp/;
@@ -457,7 +450,7 @@ app.post('/api/projects/:id/images', requireAuth, upload.single('image'), (req, 
     }
 
     const { caption, is_before, is_after, display_order } = req.body;
-    const imagePath = `/uploads/projects/${req.file.filename}`;
+    const imagePath = req.file.path;
 
     db.run(`
         INSERT INTO project_images (project_id, image_path, caption, is_before, is_after, display_order)
@@ -711,7 +704,7 @@ app.post('/api/upload/:type', requireAuth, upload.single('image'), (req, res) =>
         return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    const relativePath = `/uploads/${req.params.type}/${req.file.filename}`;
+    const relativePath = req.file.path;
     res.json({
         success: true,
         path: relativePath,
