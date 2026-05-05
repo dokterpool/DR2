@@ -33,7 +33,7 @@ Sistem Manajemen Konten (CMS) lengkap untuk website Dokter Pool - layanan perawa
 
 - **Frontend**: HTML5, CSS3, Vanilla JavaScript, Poppins Font
 - **Backend**: Node.js, Express.js
-- **Database**: SQLite3
+- **Database**: PostgreSQL (Supabase-compatible)
 - **Authentication**: bcryptjs, express-session
 - **File Upload**: Multer
 - **Rich Text Editor**: TinyMCE
@@ -221,9 +221,7 @@ pm2 startup
 ## Maintenance
 
 ### Backup Database
-```bash
-cp database/database.sqlite database/backup-$(date +%Y%m%d).sqlite
-```
+Gunakan backup terjadwal dari provider PostgreSQL (mis. Supabase PITR/backup), bukan file copy lokal.
 
 ### Update Dependencies
 ```bash
@@ -232,14 +230,13 @@ npm update
 
 ## Troubleshooting
 
-### Database locked
-```bash
-# Restart server atau tunggu proses selesai
-```
+### Database connection error
+- Pastikan `DATABASE_URL` valid dan database Supabase dapat diakses dari Render.
+- Verifikasi SSL sudah aktif untuk environment production.
 
 ### Upload failed
-- Cek folder uploads ada dan writable
-- Cek file size tidak melebihi limit (5MB)
+- Pastikan kredensial Cloudinary (`CLOUDINARY_*`) benar
+- Cek file size tidak melebihi limit (10MB)
 - Cek file type (hanya gambar)
 
 ### Session expired
@@ -255,3 +252,34 @@ MIT License - Dokter Pool 2024
 Untuk bantuan dan pertanyaan:
 - Email: info@dokterpool.com
 - WhatsApp: +62 812 3456 7890
+## Deploy Gratis (Vercel + Render + Supabase + Cloudinary)
+
+Arsitektur yang direkomendasikan:
+- **Frontend**: Vercel (Free)
+- **Backend Express**: Render Web Service (Free)
+- **Database**: Supabase Postgres (Free)
+- **Media Upload**: Cloudinary (Free)
+
+### Environment Variables (Render)
+Set variabel berikut pada service backend Render:
+
+```env
+NODE_ENV=production
+PORT=10000
+SESSION_SECRET=<random-secret>
+SITE_URL=<url frontend vercel>
+DATABASE_URL=<supabase-connection-string>
+CLOUDINARY_CLOUD_NAME=<cloudinary-cloud-name>
+CLOUDINARY_API_KEY=<cloudinary-api-key>
+CLOUDINARY_API_SECRET=<cloudinary-api-secret>
+```
+
+### Langkah Deploy Singkat
+1. Buat project Supabase, copy connection string Postgres ke `DATABASE_URL`.
+2. Buat akun Cloudinary, ambil `cloud_name`, `api_key`, dan `api_secret`.
+3. Deploy backend ke Render:
+   - Build Command: `npm install --legacy-peer-deps`
+   - Start Command: `npm start`
+4. Jalankan inisialisasi DB sekali di Render shell:
+   - `npm run init-db`
+5. Deploy frontend ke Vercel dan arahkan API ke domain backend Render.

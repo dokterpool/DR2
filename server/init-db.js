@@ -1,23 +1,5 @@
-const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcryptjs');
-const path = require('path');
-const fs = require('fs');
-
-const dbPath = path.join(__dirname, '../database/database.sqlite');
-
-// Ensure database directory exists
-const dbDir = path.dirname(dbPath);
-if (!fs.existsSync(dbDir)) {
-    fs.mkdirSync(dbDir, { recursive: true });
-}
-
-const db = new sqlite3.Database(dbPath, (err) => {
-    if (err) {
-        console.error('Error opening database:', err);
-        process.exit(1);
-    }
-    console.log('Connected to SQLite database');
-});
+const db = require('./db');
 
 // Create tables
 const createTables = () => {
@@ -25,38 +7,38 @@ const createTables = () => {
         db.exec(`
             -- Users table for admin authentication
             CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id SERIAL PRIMARY KEY,
                 username TEXT UNIQUE NOT NULL,
                 password TEXT NOT NULL,
                 email TEXT UNIQUE,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
 
             -- Website settings table
             CREATE TABLE IF NOT EXISTS settings (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id SERIAL PRIMARY KEY,
                 key TEXT UNIQUE NOT NULL,
                 value TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
 
             -- Content pages table
             CREATE TABLE IF NOT EXISTS content_pages (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id SERIAL PRIMARY KEY,
                 page_key TEXT UNIQUE NOT NULL,
                 title TEXT,
                 content TEXT,
                 meta_title TEXT,
                 meta_description TEXT,
                 keywords TEXT,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
 
             -- Blog articles table
             CREATE TABLE IF NOT EXISTS articles (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id SERIAL PRIMARY KEY,
                 title TEXT NOT NULL,
                 slug TEXT UNIQUE NOT NULL,
                 content TEXT,
@@ -66,47 +48,47 @@ const createTables = () => {
                 meta_description TEXT,
                 keywords TEXT,
                 status TEXT DEFAULT 'draft',
-                published_at DATETIME,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                published_at TIMESTAMP,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
 
             -- Projects table (enhanced gallery with multiple images)
             CREATE TABLE IF NOT EXISTS projects (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id SERIAL PRIMARY KEY,
                 title TEXT NOT NULL,
                 slug TEXT UNIQUE NOT NULL,
                 location TEXT,
                 pool_type TEXT,
-                year INTEGER,
+                year INT,
                 description TEXT,
                 specifications TEXT,
                 featured_image TEXT,
-                is_featured INTEGER DEFAULT 0,
-                has_before_after INTEGER DEFAULT 0,
-                display_order INTEGER DEFAULT 0,
+                is_featured INT DEFAULT 0,
+                has_before_after INT DEFAULT 0,
+                display_order INT DEFAULT 0,
                 meta_title TEXT,
                 meta_description TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
 
             -- Project images table (multiple images per project)
             CREATE TABLE IF NOT EXISTS project_images (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id SERIAL PRIMARY KEY,
                 project_id INTEGER NOT NULL,
                 image_path TEXT NOT NULL,
                 caption TEXT,
-                is_before INTEGER DEFAULT 0,
-                is_after INTEGER DEFAULT 0,
-                display_order INTEGER DEFAULT 0,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                is_before INT DEFAULT 0,
+                is_after INT DEFAULT 0,
+                display_order INT DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
             );
 
             -- SEO settings table
             CREATE TABLE IF NOT EXISTS seo_settings (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id SERIAL PRIMARY KEY,
                 page_key TEXT UNIQUE NOT NULL,
                 meta_title TEXT,
                 meta_description TEXT,
@@ -115,34 +97,34 @@ const createTables = () => {
                 og_image TEXT,
                 schema_markup TEXT,
                 canonical_url TEXT,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
 
             -- Services table
             CREATE TABLE IF NOT EXISTS services (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id SERIAL PRIMARY KEY,
                 title TEXT NOT NULL,
                 slug TEXT UNIQUE NOT NULL,
                 description TEXT,
                 icon TEXT,
                 content TEXT,
-                display_order INTEGER DEFAULT 0,
-                is_active INTEGER DEFAULT 1,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                display_order INT DEFAULT 0,
+                is_active INT DEFAULT 1,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
 
             -- Legacy gallery table (keep for backward compatibility)
             CREATE TABLE IF NOT EXISTS gallery (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id SERIAL PRIMARY KEY,
                 title TEXT,
                 location TEXT,
                 pool_type TEXT,
-                year INTEGER,
+                year INT,
                 image_path TEXT NOT NULL,
                 description TEXT,
-                display_order INTEGER DEFAULT 0,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                display_order INT DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `, (err) => {
             if (err) reject(err);
@@ -158,8 +140,8 @@ const insertDefaultData = async () => {
     
     return new Promise((resolve, reject) => {
         db.run(`
-            INSERT OR IGNORE INTO users (username, password, email) 
-            VALUES (?, ?, ?)
+            INSERT INTO users (username, password, email) 
+            VALUES (?, ?, ?) ON CONFLICT (username) DO NOTHING
         `, ['admin', hashedPassword, 'admin@dokterpool.com'], (err) => {
             if (err) reject(err);
             else resolve();
@@ -186,7 +168,7 @@ const insertDefaultSettings = () => {
         ['hero_images', '["https://images.unsplash.com/photo-1572331165267-854da2b10ccc?w=1920","https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920","https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?w=1920"]']
     ];
 
-    const stmt = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');
+    const stmt = db.prepare('INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT (key) DO NOTHING');
     defaultSettings.forEach(([key, value]) => {
         stmt.run(key, value);
     });
@@ -202,7 +184,7 @@ const insertDefaultContent = () => {
         ['contact', 'Hubungi Kami', 'Hubungi kami untuk konsultasi gratis...', 'Hubungi Dokter Pool', 'Hubungi tim Dokter Pool untuk layanan perawatan kolam renang', 'kontak dokter pool, hubungi kami']
     ];
 
-    const stmt = db.prepare('INSERT OR IGNORE INTO content_pages (page_key, title, content, meta_title, meta_description, keywords) VALUES (?, ?, ?, ?, ?, ?)');
+    const stmt = db.prepare('INSERT INTO content_pages (page_key, title, content, meta_title, meta_description, keywords) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT (page_key) DO NOTHING');
     defaultContent.forEach(([pageKey, title, content, metaTitle, metaDesc, keywords]) => {
         stmt.run(pageKey, title, content, metaTitle, metaDesc, keywords);
     });
@@ -218,7 +200,7 @@ const insertDefaultServices = () => {
         ['Perbaikan Equipment', 'perbaikan-equipment', 'Service dan perbaikan peralatan kolam renang', 'wrench', 'Perbaikan pompa, filter, heater, dan peralatan lainnya.', 4]
     ];
 
-    const stmt = db.prepare('INSERT OR IGNORE INTO services (title, slug, description, icon, content, display_order) VALUES (?, ?, ?, ?, ?, ?)');
+    const stmt = db.prepare('INSERT INTO services (title, slug, description, icon, content, display_order) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT (slug) DO NOTHING');
     defaultServices.forEach(([title, slug, desc, icon, content, order]) => {
         stmt.run(title, slug, desc, icon, content, order);
     });
@@ -233,7 +215,7 @@ const insertSampleProjects = () => {
         ['Kolam Apartemen Elite', 'kolam-apartemen', 'Jakarta Pusat', 'Apartemen', 2023, 'Perawatan rutin kolam renang apartemen elite dengan kualitas air premium.', '{"size": "12x6 meter", "depth": "1.2-1.5 meter", "features": "Salt chlorination, auto cover"}', 0, 0]
     ];
 
-    const stmt = db.prepare('INSERT OR IGNORE INTO projects (title, slug, location, pool_type, year, description, specifications, is_featured, has_before_after) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+    const stmt = db.prepare('INSERT INTO projects (title, slug, location, pool_type, year, description, specifications, is_featured, has_before_after) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (slug) DO NOTHING');
     sampleProjects.forEach(project => {
         stmt.run(...project);
     });
@@ -268,10 +250,10 @@ const initDatabase = async () => {
         console.log('Please change the default password after first login.');
         console.log('========================================\n');
         
-        db.close();
+        await db.close();
     } catch (error) {
         console.error('Error initializing database:', error);
-        db.close();
+        await db.close();
         process.exit(1);
     }
 };
