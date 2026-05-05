@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Galeri proyek kolam renang Dokter Pool. Lihat 150+ hasil kerja profesional kami.">
+    <meta name="keywords" content="galeri kolam renang, proyek kolam, portfolio kolam, jasa kolam renang">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://dokterpool.com/gallery.html">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Galeri Proyek - Dokter Pool">
+    <meta property="og:description" content="Lihat 150+ proyek kolam renang yang telah kami kerjakan.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dokterpool.com/gallery.html">
+    
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Galeri Proyek Dokter Pool",
+        "description": "Koleksi proyek kolam renang yang telah diselesaikan",
+        "url": "https://dokterpool.com/gallery.html",
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "Dokter Pool",
+            "url": "https://dokterpool.com"
+        }
+    }
+    </script>
+    
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Beranda", "item": "https://dokterpool.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Galeri", "item": "https://dokterpool.com/gallery.html"}
+        ]
+    }
+    </script>
+    
+    <title>Galeri Proyek - Dokter Pool</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <style>
+        /* Filter buttons */
+        .filter-bar {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .filter-btn {
+            padding: 0.625rem 1.25rem;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        /* Masonry Grid */
+        .masonry-grid {
+            column-count: 3;
+            column-gap: 1rem;
+        }
+        
+        @media (max-width: 992px) {
+            .masonry-grid {
+                column-count: 2;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .masonry-grid {
+                column-count: 1;
+            }
+        }
+        
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1rem;
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+            background: var(--gray-light);
+        }
+        
+        .masonry-item img {
+            width: 100%;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        
+        .masonry-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .masonry-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            background: linear-gradient(transparent, rgba(2, 62, 138, 0.95));
+            color: var(--white);
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .masonry-item:hover .masonry-overlay {
+            opacity: 1;
+        }
+        
+        .masonry-overlay h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .masonry-overlay p {
+            font-size: 0.85rem;
+            margin: 0;
+            opacity: 0.9;
+        }
+        
+        .masonry-tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            background: var(--secondary);
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Loading skeleton */
+        .skeleton-item {
+            break-inside: avoid;
+            margin-bottom: 1rem;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--gray-light);
+            aspect-ratio: 4/3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-swimming-pool"></i>
+                </div>
+                <span>Dokter Pool</span>
+            </a>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="services.html">Layanan</a></li>
+                <li><a href="gallery.html" class="active">Galeri</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="about.html">Tentang</a></li>
+                <li><a href="contact.html">Kontak</a></li>
+            </ul>
+            
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <nav class="breadcrumb" style="justify-content: center; margin-bottom: 1rem;">
+                <a href="index.html">Beranda</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-current">Galeri</span>
+            </nav>
+            <h1>Galeri Proyek</h1>
+            <p>Lihat hasil kerja kami dalam merawat dan membangun kolam renang berkualitas</p>
+        </div>
+    </header>
+
+    <!-- Gallery Section -->
+    <section class="section">
+        <div class="container">
+            <!-- Filter Buttons -->
+            <div class="filter-bar">
+                <button class="filter-btn active" data-filter="all">Semua</button>
+                <button class="filter-btn" data-filter="Pribadi">Rumah</button>
+                <button class="filter-btn" data-filter="Hotel">Hotel</button>
+                <button class="filter-btn" data-filter="Apartemen">Apartemen</button>
+                <button class="filter-btn" data-filter="Komersial">Komersial</button>
+            </div>
+            
+            <!-- Masonry Grid -->
+            <div class="masonry-grid" id="galleryGrid">
+                <!-- Loading skeletons -->
+                <div class="skeleton-item skeleton"></div>
+                <div class="skeleton-item skeleton" style="aspect-ratio: 3/4;"></div>
+                <div class="skeleton-item skeleton" style="aspect-ratio: 16/10;"></div>
+                <div class="skeleton-item skeleton"></div>
+                <div class="skeleton-item skeleton" style="aspect-ratio: 1/1;"></div>
+                <div class="skeleton-item skeleton" style="aspect-ratio: 4/5;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section" style="background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: white;">
+        <div class="container">
+            <div class="text-center">
+                <h2 style="color: white; margin-bottom: 1rem;">Punya Proyek Kolam Renang?</h2>
+                <p style="opacity: 0.9; max-width: 600px; margin: 0 auto 2rem;">Hubungi kami untuk konsultasi gratis dan penawaran harga terbaik.</p>
+                <a href="https://wa.me/6281234567890" class="btn btn-whatsapp btn-lg" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Konsultasi Gratis
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-swimming-pool"></i>
+                        </div>
+                        <span>Dokter Pool</span>
+                    </a>
+                    <p>Ahli perawatan kolam renang profesional dengan pengalaman lebih dari 10 tahun.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com/dokterpool" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://instagram.com/dokterpool" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://youtube.com/dokterpool" target="_blank"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4>Tautan Cepat</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Beranda</a></li>
+                        <li><a href="services.html">Layanan</a></li>
+                        <li><a href="gallery.html">Galeri</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4>Layanan</h4>
+                    <ul class="footer-links">
+                        <li><a href="services.html">Perawatan Rutin</a></li>
+                        <li><a href="services.html">Renovasi</a></li>
+                        <li><a href="services.html">Instalasi</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>Hubungi Kami</h4>
+                    <p><i class="fas fa-phone"></i> +62 21 1234 5678</p>
+                    <p><i class="fab fa-whatsapp"></i> +62 812 3456 7890</p>
+                    <p><i class="fas fa-envelope"></i> info@dokterpool.com</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Dokter Pool. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" id="lightboxClose">&times;</button>
+            <button class="lightbox-nav lightbox-prev" id="lightboxPrev"><i class="fas fa-chevron-left"></i></button>
+            <img src="" alt="" id="lightboxImage">
+            <button class="lightbox-nav lightbox-next" id="lightboxNext"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <a href="#" class="whatsapp-float" id="waFloatBtn" target="_blank" aria-label="Chat WhatsApp" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); transition: all 0.3s ease; text-decoration: none;">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script src="/js/script.js"></script>
+    <script>
+        let whatsappNumber = '6281234567890';
+        
+        async function loadWhatsAppSettings() {
+            try {
+                const response = await fetch('/api/settings');
+                const settings = await response.json();
+                if (settings.company_whatsapp) {
+                    whatsappNumber = settings.company_whatsapp.replace(/\D/g, '');
+                }
+                const waMsg = 'Halo Dokter Pool! Saya melihat galeri proyek Anda. Bisa konsultasi untuk kolam saya?';
+                document.getElementById('waFloatBtn').href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(waMsg)}`;
+            } catch (e) {}
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadWhatsAppSettings);
+        let allProjects = [];
+        let currentImageIndex = 0;
+        let allImages = [];
+        
+        // Load Projects
+        async function loadProjects() {
+            try {
+                const response = await fetch('/api/projects?limit=50');
+                allProjects = await response.json();
+                
+                renderProjects(allProjects);
+            } catch (error) {
+                console.error('Error loading projects:', error);
+                document.getElementById('galleryGrid').innerHTML = '<p class="text-center">Gagal memuat galeri</p>';
+            }
+        }
+        
+        // Render Projects
+        function renderProjects(projects) {
+            const container = document.getElementById('galleryGrid');
+            
+            if (projects.length === 0) {
+                container.innerHTML = '<p class="text-center">Belum ada proyek</p>';
+                return;
+            }
+            
+            // Collect all images for lightbox
+            allImages = [];
+            projects.forEach(project => {
+                allImages.push({
+                    src: project.featured_image || 'https://images.unsplash.com/photo-1572331165267-854da2b10ccc?w=800',
+                    title: project.title,
+                    location: project.location,
+                    slug: project.slug
+                });
+            });
+            
+            container.innerHTML = projects.map((project, index) => {
+                const aspectRatio = getRandomAspectRatio();
+                return `
+                    <div class="masonry-item" data-type="${project.pool_type || ''}" onclick="openLightbox(${index})">
+                        <img src="${project.featured_image || 'https://images.unsplash.com/photo-1572331165267-854da2b10ccc?w=600'}" 
+                             alt="${project.title}" 
+                             loading="lazy"
+                             style="aspect-ratio: ${aspectRatio};">
+                        <div class="masonry-overlay">
+                            ${project.is_featured ? '<span class="masonry-tag">UNGGULAN</span>' : ''}
+                            <h4>${project.title}</h4>
+                            <p><i class="fas fa-map-marker-alt"></i> ${project.location || 'Jakarta'} • ${project.pool_type || 'Kolam'}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Random aspect ratios for masonry effect
+        function getRandomAspectRatio() {
+            const ratios = ['4/3', '3/4', '16/10', '1/1', '4/5'];
+            return ratios[Math.floor(Math.random() * ratios.length)];
+        }
+        
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filter = btn.dataset.filter;
+                if (filter === 'all') {
+                    renderProjects(allProjects);
+                } else {
+                    const filtered = allProjects.filter(p => p.pool_type === filter);
+                    renderProjects(filtered);
+                }
+            });
+        });
+        
+        // Lightbox
+        function openLightbox(index) {
+            currentImageIndex = index;
+            updateLightboxImage();
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        function updateLightboxImage() {
+            const img = allImages[currentImageIndex];
+            document.getElementById('lightboxImage').src = img.src;
+            document.getElementById('lightboxImage').alt = img.title;
+        }
+        
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % allImages.length;
+            updateLightboxImage();
+        }
+        
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + allImages.length) % allImages.length;
+            updateLightboxImage();
+        }
+        
+        // Lightbox event listeners
+        document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+        document.getElementById('lightboxNext').addEventListener('click', nextImage);
+        document.getElementById('lightboxPrev').addEventListener('click', prevImage);
+        
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeLightbox();
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('lightbox').classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') prevImage();
+        });
+        
+        // Load on page load
+        document.addEventListener('DOMContentLoaded', loadProjects);
+    </script>
+</body>
+</html>

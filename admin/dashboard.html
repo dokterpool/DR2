@@ -1,0 +1,2892 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Dokter Pool CMS</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- TinyMCE -->
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    
+    <style>
+        :root {
+            --primary: #0077B6;
+            --primary-dark: #023E8A;
+            --secondary: #00B4D8;
+            --accent: #90E0EF;
+            --light: #CAF0F8;
+            --white: #FFFFFF;
+            --dark: #1a1a2e;
+            --gray: #6c757d;
+            --gray-light: #f8f9fa;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+            --radius: 8px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--gray-light);
+        }
+
+        /* Layout */
+        .admin-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--primary-dark);
+            color: var(--white);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .sidebar-logo i {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-user {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .sidebar-user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .sidebar-user-info {
+            flex: 1;
+        }
+
+        .sidebar-user-name {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .sidebar-user-role {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .sidebar-nav-title {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            opacity: 0.6;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .sidebar-nav-item:hover,
+        .sidebar-nav-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+        }
+
+        .sidebar-nav-item.active {
+            border-left: 3px solid var(--secondary);
+        }
+
+        .sidebar-nav-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            height: var(--header-height);
+            background: var(--white);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        .header-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius);
+            border: none;
+            background: var(--gray-light);
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        /* Content Area */
+        .content {
+            padding: 2rem;
+        }
+
+        /* Page Sections */
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.blue {
+            background: rgba(0, 119, 182, 0.1);
+            color: var(--primary);
+        }
+
+        .stat-icon.green {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+
+        .stat-icon.orange {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+
+        .stat-icon.red {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+
+        .stat-info h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-info p {
+            color: var(--gray);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-text {
+            font-size: 0.875rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--gray-light);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .table th {
+            font-weight: 600;
+            background: var(--gray-light);
+        }
+
+        .table tr:hover {
+            background: rgba(0, 119, 182, 0.05);
+        }
+
+        /* Status Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(255, 193, 7, 0.1);
+            color: #856404;
+        }
+
+        .badge-danger {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .tab {
+            padding: 0.75rem 1.25rem;
+            font-weight: 500;
+            color: var(--gray);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+            color: var(--primary);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        /* Image Upload */
+        .image-upload {
+            border: 2px dashed #e9ecef;
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .image-upload:hover {
+            border-color: var(--primary);
+            background: rgba(0, 119, 182, 0.05);
+        }
+
+        .image-upload i {
+            font-size: 2rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .image-preview {
+            max-width: 200px;
+            margin-top: 1rem;
+        }
+
+        .image-preview img {
+            width: 100%;
+            border-radius: var(--radius);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        /* Login Page */
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            padding: 2rem;
+        }
+
+        .login-box {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 400px;
+            padding: 2.5rem;
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo i {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: var(--radius);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .login-logo h1 {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: rgba(40, 167, 69, 0.1);
+            color: #155724;
+            border: 1px solid rgba(40, 167, 69, 0.2);
+        }
+
+        .alert-error {
+            background: rgba(220, 53, 69, 0.1);
+            color: #721c24;
+            border: 1px solid rgba(220, 53, 69, 0.2);
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--gray-light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* AI Assistant Panel */
+        .ai-panel {
+            background: linear-gradient(135deg, rgba(0, 119, 182, 0.05) 0%, rgba(0, 180, 216, 0.05) 100%);
+            border: 1px solid rgba(0, 119, 182, 0.2);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .ai-panel-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .ai-panel-header i {
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+
+        .ai-panel-header h4 {
+            margin: 0;
+            color: var(--primary-dark);
+        }
+
+        .ai-options {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .header-toggle {
+                display: block;
+            }
+
+            .grid-2,
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Utility */
+        .text-center { text-align: center; }
+        .mb-0 { margin-bottom: 0; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-page">
+        <div class="login-box">
+            <div class="login-logo">
+                <i class="fas fa-swimming-pool"></i>
+                <h1>Dokter Pool Admin</h1>
+            </div>
+            
+            <div id="loginAlert"></div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" class="form-control" placeholder="Masukkan username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" placeholder="Masukkan password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+            
+            <p class="text-center" style="margin-top: 1.5rem; font-size: 0.875rem; color: var(--gray);">
+                Default: admin / admin123
+            </p>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="dashboardPage" class="admin-wrapper hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="/" class="sidebar-logo" target="_blank">
+                    <i class="fas fa-swimming-pool"></i>
+                    <span>Dokter Pool</span>
+                </a>
+            </div>
+            
+            <div class="sidebar-user">
+                <div class="sidebar-user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-name" id="userName">Admin</div>
+                    <div class="sidebar-user-role">Administrator</div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="sidebar-nav-title">Menu Utama</div>
+                
+                <a href="#" class="sidebar-nav-item active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                
+                <a href="#" class="sidebar-nav-item" data-page="content">
+                    <i class="fas fa-edit"></i>
+                    <span>Content Editor</span>
+                </a>
+                
+                <a href="#" class="sidebar-nav-item" data-page="blog">
+                    <i class="fas fa-newspaper"></i>
+                    <span>Blog Manager</span>
+                </a>
+                
+                <a href="#" class="sidebar-nav-item" data-page="projects">
+                    <i class="fas fa-images"></i>
+                    <span>Projects Manager</span>
+                </a>
+                
+                <a href="#" class="sidebar-nav-item" data-page="gallery">
+                    <i class="fas fa-photo-video"></i>
+                    <span>Legacy Gallery</span>
+                </a>
+                
+                <a href="#" class="sidebar-nav-item" data-page="seo">
+                    <i class="fas fa-search"></i>
+                    <span>SEO Manager</span>
+                </a>
+                
+                <a href="#" class="sidebar-nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Website Settings</span>
+                </a>
+                
+                <div class="sidebar-nav-title">Lainnya</div>
+                
+                <a href="#" class="sidebar-nav-item" data-page="ai-assistant">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Assistant</span>
+                </a>
+                
+                <a href="#" class="sidebar-nav-item" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="header-toggle" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2 class="header-title" id="pageTitle">Dashboard</h2>
+                </div>
+                <div class="header-right">
+                    <a href="/" class="header-btn" target="_blank" title="Lihat Website">
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    <button class="header-btn" id="refreshBtn" title="Refresh">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content">
+                <!-- Alert Container -->
+                <div id="alertContainer"></div>
+
+                <!-- Dashboard Page -->
+                <div id="dashboard-section" class="page-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon blue">
+                                <i class="fas fa-newspaper"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalArticles">0</h3>
+                                <p>Total Artikel</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon green">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="publishedArticles">0</h3>
+                                <p>Artikel Published</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon orange">
+                                <i class="fas fa-images"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalGallery">0</h3>
+                                <p>Foto Galeri</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon red">
+                                <i class="fas fa-images"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalProjects">0</h3>
+                                <p>Proyek</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Artikel Terbaru</h3>
+                                <a href="#" class="btn btn-sm btn-secondary" onclick="showPage('blog')">Lihat Semua</a>
+                            </div>
+                            <div class="card-body">
+                                <div id="recentArticles" class="table-container">
+                                    <p class="text-center" style="color: var(--gray);">Memuat...</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Aktivitas Terbaru</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="recentActivity">
+                                    <div style="padding: 1rem; border-left: 3px solid var(--primary); margin-bottom: 1rem; background: var(--gray-light);">
+                                        <p style="margin: 0; font-weight: 500;">Selamat datang di Dashboard!</p>
+                                        <p style="margin: 0.25rem 0 0; font-size: 0.875rem; color: var(--gray);">Sistem CMS Dokter Pool siap digunakan.</p>
+                                    </div>
+                                    <div style="padding: 1rem; border-left: 3px solid var(--success); margin-bottom: 1rem; background: var(--gray-light);">
+                                        <p style="margin: 0; font-weight: 500;">Tips: Gunakan AI Assistant</p>
+                                        <p style="margin: 0.25rem 0 0; font-size: 0.875rem; color: var(--gray);">Generate ide dan artikel dengan bantuan AI.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Editor Page -->
+                <div id="content-section" class="page-section">
+                    <div class="tabs">
+                        <div class="tab active" data-tab="home">Homepage</div>
+                        <div class="tab" data-tab="about">Tentang</div>
+                        <div class="tab" data-tab="services">Layanan</div>
+                        <div class="tab" data-tab="contact">Kontak</div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title" id="contentTitle">Edit Homepage</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="contentForm">
+                                <input type="hidden" name="page_key" id="contentPageKey" value="home">
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Judul Halaman</label>
+                                    <input type="text" name="title" class="form-control" id="contentTitleInput" placeholder="Judul halaman">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Konten</label>
+                                    <textarea name="content" class="form-control" id="contentEditor" rows="10" placeholder="Konten halaman"></textarea>
+                                </div>
+                                
+                                <div class="grid-2">
+                                    <div class="form-group">
+                                        <label class="form-label">Meta Title</label>
+                                        <input type="text" name="meta_title" class="form-control" id="contentMetaTitle" placeholder="Meta title untuk SEO">
+                                        <p class="form-text">Judul yang muncul di hasil pencarian Google</p>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">Keywords</label>
+                                        <input type="text" name="keywords" class="form-control" id="contentKeywords" placeholder="keyword1, keyword2, keyword3">
+                                        <p class="form-text">Pisahkan dengan koma</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Meta Description</label>
+                                    <textarea name="meta_description" class="form-control" id="contentMetaDesc" rows="3" placeholder="Deskripsi singkat untuk SEO"></textarea>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Simpan Perubahan
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blog Manager Page -->
+                <div id="blog-section" class="page-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Kelola Artikel</h3>
+                            <button class="btn btn-primary btn-sm" onclick="openArticleModal()">
+                                <i class="fas fa-plus"></i> Artikel Baru
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-container">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Judul</th>
+                                            <th>Slug</th>
+                                            <th>Status</th>
+                                            <th>Tanggal</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="articlesTable">
+                                        <tr>
+                                            <td colspan="5" class="text-center">Memuat artikel...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projects Manager Page -->
+                <div id="projects-section" class="page-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Kelola Proyek</h3>
+                            <button class="btn btn-primary btn-sm" onclick="openProjectModal()">
+                                <i class="fas fa-plus"></i> Proyek Baru
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-container">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Gambar</th>
+                                            <th>Judul</th>
+                                            <th>Lokasi</th>
+                                            <th>Tipe</th>
+                                            <th>Unggulan</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="projectsTable">
+                                        <tr>
+                                            <td colspan="6" class="text-center">Memuat proyek...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gallery Manager Page -->
+                <div id="gallery-section" class="page-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Kelola Galeri (Legacy)</h3>
+                            <button class="btn btn-primary btn-sm" onclick="openGalleryModal()">
+                                <i class="fas fa-plus"></i> Tambah Foto
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="galleryGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem;">
+                                <p class="text-center" style="grid-column: 1/-1; color: var(--gray);">Memuat galeri...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEO Manager Page -->
+                <div id="seo-section" class="page-section">
+                    <div class="tabs">
+                        <div class="tab active" data-seo-tab="home">Homepage</div>
+                        <div class="tab" data-seo-tab="about">Tentang</div>
+                        <div class="tab" data-seo-tab="services">Layanan</div>
+                        <div class="tab" data-seo-tab="blog">Blog</div>
+                        <div class="tab" data-seo-tab="contact">Kontak</div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">SEO Settings</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="seoForm">
+                                <input type="hidden" name="page_key" id="seoPageKey" value="home">
+                                
+                                <div class="grid-2">
+                                    <div class="form-group">
+                                        <label class="form-label">Meta Title</label>
+                                        <input type="text" name="meta_title" class="form-control" id="seoMetaTitle" placeholder="Meta title">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">OG Title</label>
+                                        <input type="text" name="og_title" class="form-control" id="seoOgTitle" placeholder="Open Graph title">
+                                    </div>
+                                </div>
+                                
+                                <div class="grid-2">
+                                    <div class="form-group">
+                                        <label class="form-label">Meta Description</label>
+                                        <textarea name="meta_description" class="form-control" id="seoMetaDesc" rows="3" placeholder="Meta description"></textarea>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">OG Description</label>
+                                        <textarea name="og_description" class="form-control" id="seoOgDesc" rows="3" placeholder="Open Graph description"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">OG Image URL</label>
+                                    <input type="text" name="og_image" class="form-control" id="seoOgImage" placeholder="https://example.com/image.jpg">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Schema Markup (JSON-LD)</label>
+                                    <textarea name="schema_markup" class="form-control" id="seoSchema" rows="8" placeholder='{"@context": "https://schema.org", ...}'></textarea>
+                                    <p class="form-text">JSON-LD structured data untuk rich snippets</p>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Simpan SEO Settings
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Website Settings Page -->
+                <div id="settings-section" class="page-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Pengaturan Website</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="settingsForm">
+                                <div class="grid-2">
+                                    <div class="form-group">
+                                        <label class="form-label">Nama Perusahaan</label>
+                                        <input type="text" name="company_name" class="form-control" id="settingCompanyName">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" name="company_email" class="form-control" id="settingEmail">
+                                    </div>
+                                </div>
+                                
+                                <div class="grid-2">
+                                    <div class="form-group">
+                                        <label class="form-label">Telepon</label>
+                                        <input type="text" name="company_phone" class="form-control" id="settingPhone">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">WhatsApp</label>
+                                        <input type="text" name="company_whatsapp" class="form-control" id="settingWhatsapp">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Alamat</label>
+                                    <textarea name="company_address" class="form-control" id="settingAddress" rows="2"></textarea>
+                                </div>
+                                
+                                <div class="grid-2">
+                                    <div class="form-group">
+                                        <label class="form-label">Facebook URL</label>
+                                        <input type="url" name="facebook_url" class="form-control" id="settingFacebook">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">Instagram URL</label>
+                                        <input type="url" name="instagram_url" class="form-control" id="settingInstagram">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">YouTube URL</label>
+                                    <input type="url" name="youtube_url" class="form-control" id="settingYoutube">
+                                </div>
+                                
+                                <hr style="margin: 2rem 0; border: none; border-top: 1px solid #e9ecef;">
+                                
+                                <h4 style="margin-bottom: 1.5rem;">Homepage Settings</h4>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Headline Homepage</label>
+                                    <input type="text" name="homepage_headline" class="form-control" id="settingHeadline">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Deskripsi Hero</label>
+                                    <textarea name="homepage_description" class="form-control" id="settingHeroDesc" rows="3"></textarea>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Simpan Pengaturan
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Assistant Page -->
+                <div id="ai-assistant-section" class="page-section">
+                    <div class="ai-panel">
+                        <div class="ai-panel-header">
+                            <i class="fas fa-robot"></i>
+                            <h4>AI Content Assistant</h4>
+                        </div>
+                        <p style="margin-bottom: 1rem;">Gunakan AI untuk membantu membuat konten blog yang SEO-friendly dan berkualitas.</p>
+                        <div class="ai-options">
+                            <button class="btn btn-primary btn-sm" onclick="openAiModal('ideas')">
+                                <i class="fas fa-lightbulb"></i> Generate Ide Blog
+                            </button>
+                            <button class="btn btn-primary btn-sm" onclick="openAiModal('outline')">
+                                <i class="fas fa-list"></i> Generate Outline
+                            </button>
+                            <button class="btn btn-primary btn-sm" onclick="openAiModal('article')">
+                                <i class="fas fa-file-alt"></i> Generate Artikel
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Tips Membuat Konten AI-Friendly</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="grid-2">
+                                <div>
+                                    <h4 style="margin-bottom: 1rem; color: var(--primary);"><i class="fas fa-check-circle"></i> Struktur yang Baik</h4>
+                                    <ul style="padding-left: 1.5rem; color: var(--gray);">
+                                        <li>Gunakan heading H1, H2, H3 dengan hierarki jelas</li>
+                                        <li>Tiap paragraf fokus pada satu ide utama</li>
+                                        <li>Gunakan bullet points dan numbered lists</li>
+                                        <li>Tambahkan FAQ section di akhir artikel</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 style="margin-bottom: 1rem; color: var(--primary);"><i class="fas fa-check-circle"></i> SEO Best Practices</h4>
+                                    <ul style="padding-left: 1.5rem; color: var(--gray);">
+                                        <li>Gunakan keyword di title, headings, dan awal paragraf</li>
+                                        <li>Meta description 150-160 karakter</li>
+                                        <li>Alt text untuk semua gambar</li>
+                                        <li>Internal links ke artikel terkait</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 2rem; padding: 1.5rem; background: var(--gray-light); border-radius: var(--radius);">
+                                <h4 style="margin-bottom: 1rem;"><i class="fas fa-code"></i> Schema Markup yang Direkomendasikan</h4>
+                                <ul style="padding-left: 1.5rem; color: var(--gray);">
+                                    <li><strong>Article Schema</strong> - Untuk semua artikel blog</li>
+                                    <li><strong>FAQPage Schema</strong> - Untuk section FAQ</li>
+                                    <li><strong>LocalBusiness Schema</strong> - Untuk halaman kontak/tentang</li>
+                                    <li><strong>BreadcrumbList Schema</strong> - Untuk navigasi</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Article Modal -->
+    <div class="modal-overlay" id="articleModal">
+        <div class="modal" style="max-width: 900px;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="articleModalTitle">Artikel Baru</h3>
+                <button class="modal-close" onclick="closeModal('articleModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="articleForm">
+                    <input type="hidden" name="id" id="articleId">
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Judul *</label>
+                            <input type="text" name="title" class="form-control" id="articleTitle" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Slug URL *</label>
+                            <input type="text" name="slug" class="form-control" id="articleSlug" required>
+                            <p class="form-text">Contoh: cara-merawat-kolam-renang</p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Featured Image</label>
+                        <input type="file" name="image" class="form-control" id="articleImage" accept="image/*">
+                        <div id="articleImagePreview" class="image-preview hidden"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Excerpt</label>
+                        <textarea name="excerpt" class="form-control" id="articleExcerpt" rows="2" placeholder="Ringkasan singkat artikel"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Konten *</label>
+                        <textarea name="content" class="form-control" id="articleContent" rows="15"></textarea>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Meta Title</label>
+                            <input type="text" name="meta_title" class="form-control" id="articleMetaTitle">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Keywords</label>
+                            <input type="text" name="keywords" class="form-control" id="articleKeywords" placeholder="kolam renang, perawatan, tips">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Meta Description</label>
+                        <textarea name="meta_description" class="form-control" id="articleMetaDesc" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select name="status" class="form-control" id="articleStatus">
+                            <option value="draft">Draft</option>
+                            <option value="published">Published</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('articleModal')">Batal</button>
+                <button class="btn btn-primary" onclick="saveArticle()">
+                    <i class="fas fa-save"></i> Simpan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Modal -->
+    <div class="modal-overlay" id="projectModal">
+        <div class="modal" style="max-width: 900px;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="projectModalTitle">Proyek Baru</h3>
+                <button class="modal-close" onclick="closeModal('projectModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="projectForm">
+                    <input type="hidden" name="id" id="projectId">
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Judul Proyek *</label>
+                            <input type="text" name="title" class="form-control" id="projectTitle" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Slug URL *</label>
+                            <input type="text" name="slug" class="form-control" id="projectSlug" required>
+                            <p class="form-text">Contoh: kolam-renang-bsd</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Lokasi</label>
+                            <input type="text" name="location" class="form-control" id="projectLocation" placeholder="Contoh: BSD City, Tangerang">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Tahun</label>
+                            <input type="number" name="year" class="form-control" id="projectYear" placeholder="2024">
+                        </div>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Tipe Kolam</label>
+                            <select name="pool_type" class="form-control" id="projectPoolType">
+                                <option value="">Pilih Tipe</option>
+                                <option value="Pribadi">Pribadi</option>
+                                <option value="Hotel">Hotel</option>
+                                <option value="Apartemen">Apartemen</option>
+                                <option value="Komersial">Komersial</option>
+                                <option value="Umum">Umum</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Featured Image</label>
+                            <input type="file" name="featured_image" class="form-control" id="projectFeaturedImage" accept="image/*">
+                            <div id="projectFeaturedPreview" class="image-preview hidden"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Deskripsi</label>
+                        <textarea name="description" class="form-control" id="projectDescription" rows="4" placeholder="Deskripsi lengkap proyek..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Spesifikasi (JSON)</label>
+                        <textarea name="specifications" class="form-control" id="projectSpecs" rows="3" placeholder='{"size": "8x4 meter", "depth": "1.2-1.8 meter"}'></textarea>
+                        <p class="form-text">Format JSON untuk ukuran, kedalaman, fitur, dll.</p>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" name="is_featured" id="projectIsFeatured" value="1"> Tampilkan di Beranda
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" name="has_before_after" id="projectHasBeforeAfter" value="1"> Ada Before/After
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <hr style="margin: 1.5rem 0;">
+                    
+                    <h4 style="margin-bottom: 1rem;">Gambar Proyek</h4>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Upload Multiple Images</label>
+                        <input type="file" name="images" class="form-control" id="projectImages" accept="image/*" multiple>
+                        <p class="form-text">Pilih multiple gambar sekaligus. Drag & drop untuk mengurutkan.</p>
+                    </div>
+                    
+                    <div id="projectImagesList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <!-- Images will be listed here -->
+                    </div>
+                    
+                    <hr style="margin: 1.5rem 0;">
+                    
+                    <h4 style="margin-bottom: 1rem;">SEO</h4>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Meta Title</label>
+                        <input type="text" name="meta_title" class="form-control" id="projectMetaTitle">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Meta Description</label>
+                        <textarea name="meta_description" class="form-control" id="projectMetaDesc" rows="2"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('projectModal')">Batal</button>
+                <button class="btn btn-primary" onclick="saveProject()">
+                    <i class="fas fa-save"></i> Simpan Proyek
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Modal -->
+    <div class="modal-overlay" id="galleryModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="galleryModalTitle">Tambah Foto</h3>
+                <button class="modal-close" onclick="closeModal('galleryModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="galleryForm">
+                    <input type="hidden" name="id" id="galleryId">
+                    
+                    <div class="form-group">
+                        <label class="form-label">Foto *</label>
+                        <input type="file" name="image" class="form-control" id="galleryImage" accept="image/*" required>
+                        <div id="galleryImagePreview" class="image-preview hidden"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Judul Proyek</label>
+                        <input type="text" name="title" class="form-control" id="galleryTitle" placeholder="Contoh: Kolam Renang Pribadi">
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Lokasi</label>
+                            <input type="text" name="location" class="form-control" id="galleryLocation" placeholder="Contoh: Jakarta Selatan">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Tahun</label>
+                            <input type="number" name="year" class="form-control" id="galleryYear" placeholder="2024">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Tipe Kolam</label>
+                        <select name="pool_type" class="form-control" id="galleryPoolType">
+                            <option value="">Pilih Tipe</option>
+                            <option value="Pribadi">Pribadi</option>
+                            <option value="Hotel">Hotel</option>
+                            <option value="Apartemen">Apartemen</option>
+                            <option value="Komersial">Komersial</option>
+                            <option value="Umum">Umum</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Deskripsi</label>
+                        <textarea name="description" class="form-control" id="galleryDescription" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('galleryModal')">Batal</button>
+                <button class="btn btn-primary" onclick="saveGallery()">
+                    <i class="fas fa-save"></i> Simpan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Modal -->
+    <div class="modal-overlay" id="aiModal">
+        <div class="modal" style="max-width: 700px;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="aiModalTitle">AI Assistant</h3>
+                <button class="modal-close" onclick="closeModal('aiModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="aiContent">
+                    <!-- Dynamic AI content -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('aiModal')">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize TinyMCE
+        tinymce.init({
+            selector: '#articleContent',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+            height: 400,
+            menubar: false
+        });
+
+        // Global State
+        let currentPage = 'dashboard';
+        let articles = [];
+        let gallery = [];
+        let settings = {};
+
+        // API Base URL
+        const API_URL = '';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            initEventListeners();
+        });
+
+        // Check Authentication
+        async function checkAuth() {
+            try {
+                const response = await fetch(`${API_URL}/api/auth/status`);
+                const data = await response.json();
+                
+                if (data.authenticated) {
+                    showDashboard();
+                    loadDashboardData();
+                } else {
+                    showLogin();
+                }
+            } catch (error) {
+                showLogin();
+            }
+        }
+
+        // Show Login Page
+        function showLogin() {
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('dashboardPage').classList.add('hidden');
+        }
+
+        // Show Dashboard
+        function showDashboard() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('dashboardPage').classList.remove('hidden');
+        }
+
+        // Initialize Event Listeners
+        function initEventListeners() {
+            // Login Form
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+            
+            // Sidebar Toggle
+            document.getElementById('sidebarToggle').addEventListener('click', toggleSidebar);
+            
+            // Navigation
+            document.querySelectorAll('.sidebar-nav-item[data-page]').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = item.dataset.page;
+                    showPage(page);
+                });
+            });
+            
+            // Content Tabs
+            document.querySelectorAll('#content-section .tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('#content-section .tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    loadContentPage(tab.dataset.tab);
+                });
+            });
+            
+            // SEO Tabs
+            document.querySelectorAll('#seo-section .tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('#seo-section .tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    loadSeoPage(tab.dataset.seoTab);
+                });
+            });
+            
+            // Forms
+            document.getElementById('contentForm').addEventListener('submit', saveContent);
+            document.getElementById('seoForm').addEventListener('submit', saveSeo);
+            document.getElementById('settingsForm').addEventListener('submit', saveSettings);
+            
+            // Refresh Button
+            document.getElementById('refreshBtn').addEventListener('click', () => {
+                loadDashboardData();
+                showAlert('Data berhasil diperbarui', 'success');
+            });
+            
+            // Slug auto-generation
+            document.getElementById('articleTitle')?.addEventListener('blur', function() {
+                const slug = document.getElementById('articleSlug');
+                if (!slug.value && this.value) {
+                    slug.value = this.value.toLowerCase()
+                        .replace(/[^a-z0-9\s]/g, '')
+                        .replace(/\s+/g, '-');
+                }
+            });
+        }
+
+        // Handle Login
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            try {
+                const response = await fetch(`${API_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showDashboard();
+                    loadDashboardData();
+                } else {
+                    showLoginAlert(result.error || 'Login gagal', 'error');
+                }
+            } catch (error) {
+                showLoginAlert('Terjadi kesalahan. Coba lagi.', 'error');
+            }
+        }
+
+        // Handle Logout
+        async function handleLogout(e) {
+            e.preventDefault();
+            
+            try {
+                await fetch(`${API_URL}/api/auth/logout`, { method: 'POST' });
+                showLogin();
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+
+        // Toggle Sidebar
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // Show Page
+        function showPage(page) {
+            currentPage = page;
+            
+            // Update sidebar
+            document.querySelectorAll('.sidebar-nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.page === page) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // Update page title
+            const titles = {
+                'dashboard': 'Dashboard',
+                'content': 'Content Editor',
+                'blog': 'Blog Manager',
+                'projects': 'Projects Manager',
+                'gallery': 'Legacy Gallery',
+                'seo': 'SEO Manager',
+                'settings': 'Website Settings',
+                'ai-assistant': 'AI Assistant'
+            };
+            document.getElementById('pageTitle').textContent = titles[page] || page;
+            
+            // Show section
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(`${page}-section`)?.classList.add('active');
+            
+            // Load data
+            if (page === 'dashboard') loadDashboardData();
+            if (page === 'blog') loadArticles();
+            if (page === 'projects') loadProjects();
+            if (page === 'gallery') loadGallery();
+            if (page === 'content') loadContentPage('home');
+            if (page === 'seo') loadSeoPage('home');
+            if (page === 'settings') loadSettings();
+        }
+
+        // Load Dashboard Data
+        async function loadDashboardData() {
+            try {
+                // Load articles
+                const articlesRes = await fetch(`${API_URL}/api/articles?limit=100`);
+                articles = await articlesRes.json();
+                document.getElementById('totalArticles').textContent = articles.length;
+                document.getElementById('publishedArticles').textContent = articles.filter(a => a.status === 'published').length;
+                
+                // Load gallery
+                const galleryRes = await fetch(`${API_URL}/api/gallery`);
+                gallery = await galleryRes.json();
+                document.getElementById('totalGallery').textContent = gallery.length;
+                
+                // Load projects
+                const projectsRes = await fetch(`${API_URL}/api/projects?limit=100`);
+                const projects = await projectsRes.json();
+                document.getElementById('totalProjects').textContent = projects.length;
+                
+                // Load recent articles
+                loadRecentArticles();
+                
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+
+        // Load Recent Articles
+        function loadRecentArticles() {
+            const container = document.getElementById('recentArticles');
+            const recent = articles.slice(0, 5);
+            
+            if (recent.length === 0) {
+                container.innerHTML = '<p class="text-center" style="color: var(--gray);">Belum ada artikel</p>';
+                return;
+            }
+            
+            container.innerHTML = `
+                <table class="table">
+                    <tbody>
+                        ${recent.map(article => `
+                            <tr>
+                                <td>${article.title}</td>
+                                <td><span class="badge ${article.status === 'published' ? 'badge-success' : 'badge-warning'}">${article.status}</span></td>
+                                <td>${formatDate(article.created_at)}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // Load Content Page
+        async function loadContentPage(pageKey) {
+            document.getElementById('contentPageKey').value = pageKey;
+            document.getElementById('contentTitle').textContent = `Edit ${pageKey.charAt(0).toUpperCase() + pageKey.slice(1)}`;
+            
+            try {
+                const response = await fetch(`${API_URL}/api/content/${pageKey}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('contentTitleInput').value = data.title || '';
+                    document.getElementById('contentEditor').value = data.content || '';
+                    document.getElementById('contentMetaTitle').value = data.meta_title || '';
+                    document.getElementById('contentMetaDesc').value = data.meta_description || '';
+                    document.getElementById('contentKeywords').value = data.keywords || '';
+                }
+            } catch (error) {
+                console.error('Error loading content:', error);
+            }
+        }
+
+        // Save Content
+        async function saveContent(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            try {
+                const response = await fetch(`${API_URL}/api/content/${data.page_key}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    showAlert('Konten berhasil disimpan', 'success');
+                } else {
+                    showAlert('Gagal menyimpan konten', 'error');
+                }
+            } catch (error) {
+                showAlert('Terjadi kesalahan', 'error');
+            }
+        }
+
+        // Load Articles
+        async function loadArticles() {
+            try {
+                const response = await fetch(`${API_URL}/api/articles?limit=100`);
+                articles = await response.json();
+                renderArticlesTable();
+            } catch (error) {
+                console.error('Error loading articles:', error);
+            }
+        }
+
+        // Render Articles Table
+        function renderArticlesTable() {
+            const tbody = document.getElementById('articlesTable');
+            
+            if (articles.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">Belum ada artikel</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = articles.map(article => `
+                <tr>
+                    <td>${article.title}</td>
+                    <td><code>/${article.slug}</code></td>
+                    <td><span class="badge ${article.status === 'published' ? 'badge-success' : 'badge-warning'}">${article.status}</span></td>
+                    <td>${formatDate(article.created_at)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-secondary" onclick="editArticle(${article.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteArticle(${article.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Open Article Modal
+        function openArticleModal() {
+            document.getElementById('articleForm').reset();
+            document.getElementById('articleId').value = '';
+            document.getElementById('articleModalTitle').textContent = 'Artikel Baru';
+            document.getElementById('articleImagePreview').classList.add('hidden');
+            tinymce.get('articleContent').setContent('');
+            openModal('articleModal');
+        }
+
+        // Edit Article
+        function editArticle(id) {
+            const article = articles.find(a => a.id === id);
+            if (!article) return;
+            
+            document.getElementById('articleId').value = article.id;
+            document.getElementById('articleTitle').value = article.title;
+            document.getElementById('articleSlug').value = article.slug;
+            document.getElementById('articleExcerpt').value = article.excerpt || '';
+            document.getElementById('articleMetaTitle').value = article.meta_title || '';
+            document.getElementById('articleMetaDesc').value = article.meta_description || '';
+            document.getElementById('articleKeywords').value = article.keywords || '';
+            document.getElementById('articleStatus').value = article.status;
+            tinymce.get('articleContent').setContent(article.content || '');
+            
+            if (article.featured_image) {
+                document.getElementById('articleImagePreview').innerHTML = `<img src="${article.featured_image}" alt="Preview">`;
+                document.getElementById('articleImagePreview').classList.remove('hidden');
+            }
+            
+            document.getElementById('articleModalTitle').textContent = 'Edit Artikel';
+            openModal('articleModal');
+        }
+
+        // Save Article
+        async function saveArticle() {
+            const id = document.getElementById('articleId').value;
+            const formData = new FormData(document.getElementById('articleForm'));
+            
+            // Get TinyMCE content
+            formData.set('content', tinymce.get('articleContent').getContent());
+            
+            // Handle image upload
+            const imageFile = document.getElementById('articleImage').files[0];
+            if (imageFile) {
+                const uploadData = new FormData();
+                uploadData.append('image', imageFile);
+                
+                try {
+                    const uploadRes = await fetch(`${API_URL}/api/upload/blog`, {
+                        method: 'POST',
+                        body: uploadData
+                    });
+                    const uploadResult = await uploadRes.json();
+                    if (uploadResult.success) {
+                        formData.set('featured_image', uploadResult.path);
+                    }
+                } catch (error) {
+                    console.error('Upload error:', error);
+                }
+            }
+            
+            const data = Object.fromEntries(formData);
+            
+            try {
+                const url = id ? `${API_URL}/api/articles/${id}` : `${API_URL}/api/articles`;
+                const method = id ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    closeModal('articleModal');
+                    showAlert('Artikel berhasil disimpan', 'success');
+                    loadArticles();
+                } else {
+                    showAlert('Gagal menyimpan artikel', 'error');
+                }
+            } catch (error) {
+                showAlert('Terjadi kesalahan', 'error');
+            }
+        }
+
+        // Delete Article
+        async function deleteArticle(id) {
+            if (!confirm('Apakah Anda yakin ingin menghapus artikel ini?')) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/api/articles/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    showAlert('Artikel berhasil dihapus', 'success');
+                    loadArticles();
+                } else {
+                    showAlert('Gagal menghapus artikel', 'error');
+                }
+            } catch (error) {
+                showAlert('Terjadi kesalahan', 'error');
+            }
+        }
+
+        // Load Gallery
+        async function loadGallery() {
+            try {
+                const response = await fetch(`${API_URL}/api/gallery`);
+                gallery = await response.json();
+                renderGallery();
+            } catch (error) {
+                console.error('Error loading gallery:', error);
+            }
+        }
+
+        // Render Gallery
+        function renderGallery() {
+            const container = document.getElementById('galleryGrid');
+            
+            if (gallery.length === 0) {
+                container.innerHTML = '<p class="text-center" style="grid-column: 1/-1; color: var(--gray);">Belum ada foto</p>';
+                return;
+            }
+            
+            container.innerHTML = gallery.map(item => `
+                <div class="card" style="overflow: hidden;">
+                    <div style="aspect-ratio: 4/3; overflow: hidden;">
+                        <img src="${item.image_path}" alt="${item.title}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div style="padding: 1rem;">
+                        <h4 style="margin-bottom: 0.5rem;">${item.title || 'Untitled'}</h4>
+                        <p style="margin: 0; color: var(--gray); font-size: 0.875rem;">
+                            ${item.location || ''} ${item.year ? `(${item.year})` : ''}
+                        </p>
+                        <p style="margin: 0.25rem 0 0; color: var(--primary); font-size: 0.875rem;">
+                            ${item.pool_type || ''}
+                        </p>
+                        <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                            <button class="btn btn-sm btn-secondary" onclick="editGallery(${item.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteGallery(${item.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Open Gallery Modal
+        function openGalleryModal() {
+            document.getElementById('galleryForm').reset();
+            document.getElementById('galleryId').value = '';
+            document.getElementById('galleryModalTitle').textContent = 'Tambah Foto';
+            document.getElementById('galleryImagePreview').classList.add('hidden');
+            openModal('galleryModal');
+        }
+
+        // Edit Gallery
+        function editGallery(id) {
+            const item = gallery.find(g => g.id === id);
+            if (!item) return;
+            
+            document.getElementById('galleryId').value = item.id;
+            document.getElementById('galleryTitle').value = item.title || '';
+            document.getElementById('galleryLocation').value = item.location || '';
+            document.getElementById('galleryYear').value = item.year || '';
+            document.getElementById('galleryPoolType').value = item.pool_type || '';
+            document.getElementById('galleryDescription').value = item.description || '';
+            
+            document.getElementById('galleryImagePreview').innerHTML = `<img src="${item.image_path}" alt="Preview">`;
+            document.getElementById('galleryImagePreview').classList.remove('hidden');
+            
+            document.getElementById('galleryModalTitle').textContent = 'Edit Foto';
+            openModal('galleryModal');
+        }
+
+        // Save Gallery
+        async function saveGallery() {
+            const id = document.getElementById('galleryId').value;
+            const formData = new FormData(document.getElementById('galleryForm'));
+            
+            // Handle image upload
+            const imageFile = document.getElementById('galleryImage').files[0];
+            if (imageFile) {
+                const uploadData = new FormData();
+                uploadData.append('image', imageFile);
+                
+                try {
+                    const uploadRes = await fetch(`${API_URL}/api/upload/gallery`, {
+                        method: 'POST',
+                        body: uploadData
+                    });
+                    const uploadResult = await uploadRes.json();
+                    if (uploadResult.success) {
+                        formData.set('image_path', uploadResult.path);
+                    }
+                } catch (error) {
+                    console.error('Upload error:', error);
+                }
+            }
+            
+            const data = Object.fromEntries(formData);
+            
+            try {
+                const url = id ? `${API_URL}/api/gallery/${id}` : `${API_URL}/api/gallery`;
+                const method = id ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    closeModal('galleryModal');
+                    showAlert('Foto berhasil disimpan', 'success');
+                    loadGallery();
+                } else {
+                    showAlert('Gagal menyimpan foto', 'error');
+                }
+            } catch (error) {
+                showAlert('Terjadi kesalahan', 'error');
+            }
+        }
+
+        // Delete Gallery
+        async function deleteGallery(id) {
+            if (!confirm('Apakah Anda yakin ingin menghapus foto ini?')) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/api/gallery/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    showAlert('Foto berhasil dihapus', 'success');
+                    loadGallery();
+                } else {
+                    showAlert('Gagal menghapus foto', 'error');
+                }
+            } catch (error) {
+                showAlert('Terjadi kesalahan', 'error');
+            }
+        }
+
+        // Load SEO Page
+        async function loadSeoPage(pageKey) {
+            document.getElementById('seoPageKey').value = pageKey;
+            
+            try {
+                const response = await fetch(`${API_URL}/api/seo/${pageKey}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('seoMetaTitle').value = data.meta_title || '';
+                    document.getElementById('seoMetaDesc').value = data.meta_description || '';
+                    document.getElementById('seoOgTitle').value = data.og_title || '';
+                    document.getElementById('seoOgDesc').value = data.og_description || '';
+                    document.getElementById('seoOgImage').value = data.og_image || '';
+                    document.getElementById('seoSchema').value = data.schema_markup || '';
+                }
+            } catch (error) {
+                console.error('Error loading SEO:', error);
+            }
+        }
+
+        // Save SEO
+        async function saveSeo(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            try {
+                const response = await fetch(`${API_URL}/api/seo/${data.page_key}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    showAlert('SEO settings berhasil disimpan', 'success');
+                } else {
+                    showAlert('Gagal menyimpan SEO settings', 'error');
+                }
+            } catch (error) {
+                showAlert('Terjadi kesalahan', 'error');
+            }
+        }
+
+        // Load Settings
+        async function loadSettings() {
+            try {
+                const response = await fetch(`${API_URL}/api/settings`);
+                settings = await response.json();
+                
+                document.getElementById('settingCompanyName').value = settings.company_name || '';
+                document.getElementById('settingEmail').value = settings.company_email || '';
+                document.getElementById('settingPhone').value = settings.company_phone || '';
+                document.getElementById('settingWhatsapp').value = settings.company_whatsapp || '';
+                document.getElementById('settingAddress').value = settings.company_address || '';
+                document.getElementById('settingFacebook').value = settings.facebook_url || '';
+                document.getElementById('settingInstagram').value = settings.instagram_url || '';
+                document.getElementById('settingYoutube').value = settings.youtube_url || '';
+                document.getElementById('settingHeadline').value = settings.homepage_headline || '';
+                document.getElementById('settingHeroDesc').value = settings.homepage_description || '';
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        }
+
+        // Save Settings
+        async function saveSettings(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            try {
+                const response = await fetch(`${API_URL}/api/settings`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    showAlert('Pengaturan berhasil disimpan', 'success');
+                } else {
+                    showAlert('Gagal menyimpan pengaturan', 'error');
+                }
+            } catch (error) {
+                showAlert('Terjadi kesalahan', 'error');
+            }
+        }
+
+        // Open AI Modal
+        async function openAiModal(type) {
+            const modal = document.getElementById('aiModal');
+            const content = document.getElementById('aiContent');
+            
+            const titles = {
+                'ideas': 'Generate Ide Blog',
+                'outline': 'Generate Outline',
+                'article': 'Generate Artikel'
+            };
+            
+            document.getElementById('aiModalTitle').textContent = titles[type];
+            
+            if (type === 'ideas') {
+                content.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+                openModal('aiModal');
+                
+                try {
+                    const response = await fetch(`${API_URL}/api/ai/generate-ideas`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ topic: 'kolam renang', count: 8 })
+                    });
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        content.innerHTML = `
+                            <p style="margin-bottom: 1rem;">Berikut adalah ide-ide artikel yang bisa Anda tulis:</p>
+                            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                ${result.ideas.map(idea => `
+                                    <div style="padding: 1rem; background: var(--gray-light); border-radius: var(--radius); cursor: pointer;" onclick="useIdea('${idea.title}')">
+                                        <h4 style="margin: 0; color: var(--primary);">${idea.title}</h4>
+                                        <code style="font-size: 0.875rem;">/${idea.slug}</code>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    content.innerHTML = '<p class="text-center" style="color: var(--danger);">Gagal generate ide</p>';
+                }
+            } else if (type === 'outline') {
+                content.innerHTML = `
+                    <div class="form-group">
+                        <label class="form-label">Judul Artikel</label>
+                        <input type="text" class="form-control" id="outlineTitle" placeholder="Masukkan judul artikel">
+                    </div>
+                    <button class="btn btn-primary" onclick="generateOutline()">Generate Outline</button>
+                    <div id="outlineResult" style="margin-top: 1.5rem;"></div>
+                `;
+                openModal('aiModal');
+            } else if (type === 'article') {
+                content.innerHTML = `
+                    <div class="form-group">
+                        <label class="form-label">Judul Artikel</label>
+                        <input type="text" class="form-control" id="articleGenTitle" placeholder="Masukkan judul artikel">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Keywords (pisahkan dengan koma)</label>
+                        <input type="text" class="form-control" id="articleGenKeywords" placeholder="kolam renang, perawatan, tips">
+                    </div>
+                    <button class="btn btn-primary" onclick="generateArticle()">Generate Artikel</button>
+                    <div id="articleGenResult" style="margin-top: 1.5rem;"></div>
+                `;
+                openModal('aiModal');
+            }
+        }
+
+        // Generate Outline
+        async function generateOutline() {
+            const title = document.getElementById('outlineTitle').value;
+            if (!title) {
+                alert('Masukkan judul artikel');
+                return;
+            }
+            
+            document.getElementById('outlineResult').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/ai/generate-outline`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title })
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('outlineResult').innerHTML = `
+                        <h4 style="margin-bottom: 1rem;">${result.outline.title}</h4>
+                        ${result.outline.sections.map(section => `
+                            <div style="margin-bottom: 1rem; padding: 1rem; background: var(--gray-light); border-radius: var(--radius);">
+                                <h5 style="margin: 0 0 0.5rem; color: var(--primary);">${section.heading}</h5>
+                                <ul style="margin: 0; padding-left: 1.5rem; color: var(--gray);">
+                                    ${section.points.map(point => `<li>${point}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `).join('')}
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('outlineResult').innerHTML = '<p style="color: var(--danger);">Gagal generate outline</p>';
+            }
+        }
+
+        // Generate Article
+        async function generateArticle() {
+            const title = document.getElementById('articleGenTitle').value;
+            const keywords = document.getElementById('articleGenKeywords').value;
+            
+            if (!title) {
+                alert('Masukkan judul artikel');
+                return;
+            }
+            
+            document.getElementById('articleGenResult').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/ai/generate-article`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, keywords })
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('articleGenResult').innerHTML = `
+                        <div style="padding: 1rem; background: var(--gray-light); border-radius: var(--radius); max-height: 400px; overflow-y: auto;">
+                            <h4>${result.article.title}</h4>
+                            <div>${result.article.content}</div>
+                        </div>
+                        <button class="btn btn-success mt-2" onclick="useGeneratedArticle('${encodeURIComponent(JSON.stringify(result.article))}')">
+                            <i class="fas fa-plus"></i> Gunakan Artikel Ini
+                        </button>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('articleGenResult').innerHTML = '<p style="color: var(--danger);">Gagal generate artikel</p>';
+            }
+        }
+
+        // Use Generated Article
+        function useGeneratedArticle(articleData) {
+            const article = JSON.parse(decodeURIComponent(articleData));
+            closeModal('aiModal');
+            openArticleModal();
+            document.getElementById('articleTitle').value = article.title;
+            document.getElementById('articleMetaTitle').value = article.meta_title;
+            document.getElementById('articleMetaDesc').value = article.meta_description;
+            document.getElementById('articleKeywords').value = article.keywords;
+            document.getElementById('articleExcerpt').value = article.excerpt;
+            tinymce.get('articleContent').setContent(article.content);
+        }
+
+        // Use Idea
+        function useIdea(title) {
+            closeModal('aiModal');
+            openArticleModal();
+            document.getElementById('articleTitle').value = title;
+            const slug = title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-');
+            document.getElementById('articleSlug').value = slug;
+        }
+
+        // ============ PROJECTS MANAGER ============
+        
+        let projects = [];
+        let currentProjectImages = [];
+        
+        // Load Projects
+        async function loadProjects() {
+            try {
+                const response = await fetch(`${API_URL}/api/projects?limit=100`);
+                projects = await response.json();
+                renderProjectsTable();
+            } catch (error) {
+                console.error('Error loading projects:', error);
+            }
+        }
+        
+        // Render Projects Table
+        function renderProjectsTable() {
+            const tbody = document.getElementById('projectsTable');
+            
+            if (projects.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">Belum ada proyek</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = projects.map(project => `
+                <tr>
+                    <td>
+                        <img src="${project.featured_image || 'https://via.placeholder.com/80x60'}" 
+                             alt="${project.title}" 
+                             style="width: 80px; height: 60px; object-fit: cover; border-radius: 4px;">
+                    </td>
+                    <td><strong>${project.title}</strong><br><code>/${project.slug}</code></td>
+                    <td>${project.location || '-'}</td>
+                    <td>${project.pool_type || '-'}</td>
+                    <td>${project.is_featured ? '<span class="badge badge-success">Ya</span>' : '-'}</td>
+                    <td>
+                        <button class="btn btn-sm btn-secondary" onclick="editProject(${project.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteProject(${project.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // Open Project Modal
+        function openProjectModal() {
+            document.getElementById('projectForm').reset();
+            document.getElementById('projectId').value = '';
+            document.getElementById('projectModalTitle').textContent = 'Proyek Baru';
+            document.getElementById('projectFeaturedPreview').classList.add('hidden');
+            document.getElementById('projectImagesList').innerHTML = '';
+            currentProjectImages = [];
+            openModal('projectModal');
+        }
+        
+        // Edit Project
+        async function editProject(id) {
+            try {
+                const response = await fetch(`${API_URL}/api/projects/${id}`);
+                const project = await response.json();
+                
+                document.getElementById('projectId').value = project.id;
+                document.getElementById('projectTitle').value = project.title;
+                document.getElementById('projectSlug').value = project.slug;
+                document.getElementById('projectLocation').value = project.location || '';
+                document.getElementById('projectYear').value = project.year || '';
+                document.getElementById('projectPoolType').value = project.pool_type || '';
+                document.getElementById('projectDescription').value = project.description || '';
+                document.getElementById('projectSpecs').value = project.specifications || '';
+                document.getElementById('projectIsFeatured').checked = project.is_featured === 1;
+                document.getElementById('projectHasBeforeAfter').checked = project.has_before_after === 1;
+                document.getElementById('projectMetaTitle').value = project.meta_title || '';
+                document.getElementById('projectMetaDesc').value = project.meta_description || '';
+                
+                if (project.featured_image) {
+                    document.getElementById('projectFeaturedPreview').innerHTML = `<img src="${project.featured_image}" alt="Preview">`;
+                    document.getElementById('projectFeaturedPreview').classList.remove('hidden');
+                }
+                
+                // Load project images
+                currentProjectImages = project.images || [];
+                renderProjectImagesList();
+                
+                document.getElementById('projectModalTitle').textContent = 'Edit Proyek';
+                openModal('projectModal');
+            } catch (error) {
+                showAlert('Gagal memuat proyek', 'error');
+            }
+        }
+        
+        // Render Project Images List
+        function renderProjectImagesList() {
+            const container = document.getElementById('projectImagesList');
+            
+            if (currentProjectImages.length === 0) {
+                container.innerHTML = '<p class="text-center" style="grid-column: 1/-1; color: var(--gray);">Belum ada gambar</p>';
+                return;
+            }
+            
+            container.innerHTML = currentProjectImages.map((img, index) => `
+                <div style="position: relative; border-radius: 8px; overflow: hidden; border: 2px solid #e9ecef; cursor: grab;" 
+                     data-image-id="${img.id}" draggable="true">
+                    <img src="${img.image_path}" alt="" style="width: 100%; height: 100px; object-fit: cover; display: block;">
+                    <div style="padding: 8px; background: var(--gray-light);">
+                        <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 6px;">
+                            ${img.is_before ? '<span style="background: var(--warning); color: #856404; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">BEFORE</span>' : ''}
+                            ${img.is_after ? '<span style="background: var(--success); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">AFTER</span>' : ''}
+                        </div>
+                        <div style="display: flex; gap: 2px; flex-wrap: wrap; margin-bottom: 4px;">
+                            <button class="btn btn-sm btn-secondary" style="padding: 2px 6px; font-size: 0.7rem;" onclick="moveImage(${img.id}, 'up')" ${index === 0 ? 'disabled' : ''}>
+                                <i class="fas fa-arrow-up"></i>
+                            </button>
+                            <button class="btn btn-sm btn-secondary" style="padding: 2px 6px; font-size: 0.7rem;" onclick="moveImage(${img.id}, 'down')" ${index === currentProjectImages.length - 1 ? 'disabled' : ''}>
+                                <i class="fas fa-arrow-down"></i>
+                            </button>
+                        </div>
+                        <label style="font-size: 0.75rem; display: flex; align-items: center; gap: 4px; margin-bottom: 2px;">
+                            <input type="checkbox" ${img.is_before ? 'checked' : ''} onchange="toggleImageTag(${img.id}, 'before', this.checked)"> Before
+                        </label>
+                        <label style="font-size: 0.75rem; display: flex; align-items: center; gap: 4px; margin-bottom: 4px;">
+                            <input type="checkbox" ${img.is_after ? 'checked' : ''} onchange="toggleImageTag(${img.id}, 'after', this.checked)"> After
+                        </label>
+                        <button class="btn btn-sm btn-primary" style="width: 100%; margin-bottom: 4px; padding: 4px; font-size: 0.75rem;" onclick="setAsFeatured(${img.id})">
+                            <i class="fas fa-star"></i> Jadikan Utama
+                        </button>
+                        <button class="btn btn-sm btn-danger" style="width: 100%; padding: 4px; font-size: 0.75rem;" onclick="deleteProjectImage(${img.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            initDragAndDrop();
+        }
+        
+        // Toggle Image Tag (Before/After)
+        async function toggleImageTag(imageId, tag, value) {
+            const image = currentProjectImages.find(img => img.id === imageId);
+            if (!image) return;
+            
+            const updates = {
+                is_before: tag === 'before' ? (value ? 1 : 0) : (image.is_before || 0),
+                is_after: tag === 'after' ? (value ? 1 : 0) : (image.is_after || 0),
+                caption: image.caption || ''
+            };
+            
+            try {
+                await fetch(`${API_URL}/api/project-images/${imageId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updates)
+                });
+                
+                // Update local state
+                if (tag === 'before') image.is_before = value ? 1 : 0;
+                if (tag === 'after') image.is_after = value ? 1 : 0;
+                renderProjectImagesList();
+            } catch (error) {
+                showAlert('Gagal mengupdate tag', 'error');
+            }
+        }
+        
+        // Delete Project Image
+        async function deleteProjectImage(imageId) {
+            if (!confirm('Hapus gambar ini?')) return;
+            
+            try {
+                await fetch(`${API_URL}/api/project-images/${imageId}`, {
+                    method: 'DELETE'
+                });
+                
+                currentProjectImages = currentProjectImages.filter(img => img.id !== imageId);
+                renderProjectImagesList();
+                showAlert('Gambar dihapus', 'success');
+            } catch (error) {
+                showAlert('Gagal menghapus gambar', 'error');
+            }
+        }
+        
+        // Save Project
+        async function saveProject() {
+            const id = document.getElementById('projectId').value;
+            const formData = new FormData(document.getElementById('projectForm'));
+            
+            const data = {
+                title: formData.get('title'),
+                slug: formData.get('slug'),
+                location: formData.get('location'),
+                year: formData.get('year') || null,
+                pool_type: formData.get('pool_type'),
+                description: formData.get('description'),
+                specifications: formData.get('specifications'),
+                is_featured: formData.get('is_featured') ? 1 : 0,
+                has_before_after: formData.get('has_before_after') ? 1 : 0,
+                meta_title: formData.get('meta_title'),
+                meta_description: formData.get('meta_description')
+            };
+            
+            // Upload featured image if selected
+            const featuredFile = document.getElementById('projectFeaturedImage').files[0];
+            if (featuredFile) {
+                const uploadData = new FormData();
+                uploadData.append('image', featuredFile);
+                
+                try {
+                    const uploadRes = await fetch(`${API_URL}/api/upload/projects`, {
+                        method: 'POST',
+                        body: uploadData
+                    });
+                    const uploadResult = await uploadRes.json();
+                    if (uploadResult.success) {
+                        data.featured_image = uploadResult.path;
+                    }
+                } catch (error) {
+                    console.error('Featured image upload error:', error);
+                }
+            } else if (id) {
+                // Keep existing featured image
+                const existingProject = projects.find(p => p.id == id);
+                if (existingProject && existingProject.featured_image) {
+                    data.featured_image = existingProject.featured_image;
+                }
+            }
+            
+            try {
+                const url = id ? `${API_URL}/api/projects/${id}` : `${API_URL}/api/projects`;
+                const method = id ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) throw new Error('Failed to save project');
+                
+                const result = await response.json();
+                const projectId = id || result.id;
+                
+                // Upload additional images via file upload
+                const imageFiles = document.getElementById('projectImages').files;
+                for (const file of imageFiles) {
+                    const uploadData = new FormData();
+                    uploadData.append('image', file);
+                    
+                    try {
+                        const uploadRes = await fetch(`${API_URL}/api/upload/projects`, {
+                            method: 'POST',
+                            body: uploadData
+                        });
+                        const uploadResult = await uploadRes.json();
+                        
+                        if (uploadResult.success) {
+                            await fetch(`${API_URL}/api/projects/${projectId}/images-json`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    image_path: uploadResult.path,
+                                    caption: ''
+                                })
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Image upload error:', error);
+                    }
+                }
+                
+                closeModal('projectModal');
+                showAlert('Proyek berhasil disimpan', 'success');
+                loadProjects();
+            } catch (error) {
+                showAlert('Terjadi kesalahan: ' + error.message, 'error');
+            }
+        }
+        
+        // Set as Featured Image
+        async function setAsFeatured(imageId) {
+            const image = currentProjectImages.find(img => img.id === imageId);
+            if (!image) return;
+            
+            const projectId = document.getElementById('projectId').value;
+            if (!projectId) {
+                showAlert('Simpan proyek terlebih dahulu', 'warning');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/api/projects/${projectId}/featured-image`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ featured_image: image.image_path })
+                });
+                
+                if (response.ok) {
+                    // Update preview
+                    document.getElementById('projectFeaturedPreview').innerHTML = `<img src="${image.image_path}" alt="Featured">`;
+                    document.getElementById('projectFeaturedPreview').classList.remove('hidden');
+                    showAlert('Gambar utama diperbarui', 'success');
+                }
+            } catch (error) {
+                showAlert('Gagal mengubah gambar utama', 'error');
+            }
+        }
+        
+        // Move image up/down in order
+        async function moveImage(imageId, direction) {
+            const index = currentProjectImages.findIndex(img => img.id === imageId);
+            if (index < 0) return;
+            
+            const newIndex = direction === 'up' ? index - 1 : index + 1;
+            if (newIndex < 0 || newIndex >= currentProjectImages.length) return;
+            
+            // Swap in array
+            [currentProjectImages[index], currentProjectImages[newIndex]] = 
+            [currentProjectImages[newIndex], currentProjectImages[index]];
+            
+            // Update display orders
+            const imageOrders = currentProjectImages.map((img, i) => ({ id: img.id, order: i }));
+            const projectId = document.getElementById('projectId').value;
+            
+            try {
+                await fetch(`${API_URL}/api/projects/${projectId}/reorder-images`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image_orders: imageOrders })
+                });
+                renderProjectImagesList();
+            } catch (error) {
+                showAlert('Gagal mengubah urutan', 'error');
+            }
+        }
+        
+        // Reorder images by drag and drop
+        let draggedImageId = null;
+        
+        function initDragAndDrop() {
+            const container = document.getElementById('projectImagesList');
+            if (!container) return;
+            
+            container.addEventListener('dragstart', (e) => {
+                draggedImageId = parseInt(e.target.closest('[data-image-id]').dataset.imageId);
+                e.target.classList.add('dragging');
+            });
+            
+            container.addEventListener('dragend', async (e) => {
+                e.target.classList.remove('dragging');
+                
+                const projectId = document.getElementById('projectId').value;
+                if (!projectId) return;
+                
+                // Get new order from DOM
+                const items = container.querySelectorAll('[data-image-id]');
+                const imageOrders = Array.from(items).map((item, i) => ({
+                    id: parseInt(item.dataset.imageId),
+                    order: i
+                }));
+                
+                try {
+                    await fetch(`${API_URL}/api/projects/${projectId}/reorder-images`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ image_orders: imageOrders })
+                    });
+                } catch (error) {
+                    showAlert('Gagal menyimpan urutan', 'error');
+                }
+            });
+            
+            container.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const afterElement = getDragAfterElement(container, e.clientY);
+                const draggable = document.querySelector('.dragging');
+                if (draggable) {
+                    if (afterElement) {
+                        container.insertBefore(draggable, afterElement);
+                    } else {
+                        container.appendChild(draggable);
+                    }
+                }
+            });
+        }
+        
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('[data-image-id]:not(.dragging)')];
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+        
+        // Before/After Logic - validate pairs
+        function validateBeforeAfter() {
+            const beforeCount = currentProjectImages.filter(img => img.is_before).length;
+            const afterCount = currentProjectImages.filter(img => img.is_after).length;
+            
+            if (beforeCount !== afterCount) {
+                showAlert(`Peringatan: Jumlah Before (${beforeCount}) dan After (${afterCount}) tidak sama`, 'warning');
+                return false;
+            }
+            return true;
+        }
+        
+        // Delete Project
+        async function deleteProject(id) {
+            if (!confirm('Apakah Anda yakin ingin menghapus proyek ini? Semua gambar akan ikut terhapus.')) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/api/projects/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    showAlert('Proyek berhasil dihapus', 'success');
+                    loadProjects();
+                } else {
+                    showAlert('Gagal menghapus proyek', 'error');
+                }
+            } catch (error) {
+                showAlert('Terjadi kesalahan', 'error');
+            }
+        }
+        
+        // Auto-generate slug from title
+        document.getElementById('projectTitle')?.addEventListener('blur', function() {
+            const slug = document.getElementById('projectSlug');
+            if (!slug.value && this.value) {
+                slug.value = this.value.toLowerCase()
+                    .replace(/[^a-z0-9\s]/g, '')
+                    .replace(/\s+/g, '-');
+            }
+        });
+
+        // ============ END PROJECTS MANAGER ============
+
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Show Alert
+        function showAlert(message, type) {
+            const container = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+            container.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        // Show Login Alert
+        function showLoginAlert(message, type) {
+            const container = document.getElementById('loginAlert');
+            container.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+        }
+
+        // Format Date
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('id-ID', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Close modals on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

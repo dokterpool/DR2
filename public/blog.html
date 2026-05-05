@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Artikel dan tips seputar perawatan kolam renang dari ahli profesional Dokter Pool.">
+    <meta name="keywords" content="tips kolam renang, perawatan kolam, artikel kolam renang">
+    
+    <title>Blog & Artikel - Dokter Pool</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-swimming-pool"></i>
+                </div>
+                <span class="logo-text">Dokter Pool</span>
+            </a>
+            
+            <ul class="nav-menu">
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="services.html">Layanan</a></li>
+                <li><a href="gallery.html">Galeri</a></li>
+                <li><a href="blog.html" class="active">Blog</a></li>
+                <li><a href="about.html">Tentang</a></li>
+                <li><a href="contact.html">Kontak</a></li>
+            </ul>
+            
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1>Blog & Artikel</h1>
+            <p>Tips, panduan, dan informasi terbaru seputar perawatan kolam renang</p>
+        </div>
+    </header>
+
+    <!-- Blog List Section -->
+    <section class="section blog-list">
+        <div class="container">
+            <!-- Search and Filter -->
+            <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 250px;">
+                    <input type="text" class="form-control" placeholder="Cari artikel..." id="searchInput">
+                </div>
+                <select class="form-control" style="width: auto;" id="categoryFilter">
+                    <option value="">Semua Kategori</option>
+                    <option value="perawatan">Perawatan</option>
+                    <option value="tips">Tips</option>
+                    <option value="renovasi">Renovasi</option>
+                    <option value="equipment">Equipment</option>
+                </select>
+            </div>
+            
+            <div class="blog-grid">
+                <!-- Blog posts will be loaded dynamically -->
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination">
+                <a href="#" class="current">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <span>...</span>
+                <a href="#"><i class="fas fa-chevron-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Single Article Section (hidden by default) -->
+    <section class="section" style="display: none;">
+        <div class="container">
+            <div class="article-content">
+                <!-- Article content will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="section" style="background: var(--gray-light);">
+        <div class="container">
+            <div class="text-center" style="max-width: 600px; margin: 0 auto;">
+                <h2>Ikuti Newsletter Kami</h2>
+                <p>Dapatkan tips perawatan kolam renang terbaru langsung di inbox Anda</p>
+                
+                <form id="newsletterForm" style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
+                    <input type="email" class="form-control" placeholder="Masukkan email Anda" required style="flex: 1;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Berlangganan
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Topics Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Topik Populer</h2>
+                <p>Jelajahi artikel berdasarkan topik yang paling banyak diminati</p>
+            </div>
+            
+            <div class="services-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <a href="#" class="service-card text-center" style="text-decoration: none; color: inherit;">
+                    <div class="service-icon" style="margin: 0 auto 1rem;">
+                        <i class="fas fa-broom"></i>
+                    </div>
+                    <h3>Perawatan Rutin</h3>
+                    <p>12 Artikel</p>
+                </a>
+                
+                <a href="#" class="service-card text-center" style="text-decoration: none; color: inherit;">
+                    <div class="service-icon" style="margin: 0 auto 1rem;">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>Perbaikan</h3>
+                    <p>8 Artikel</p>
+                </a>
+                
+                <a href="#" class="service-card text-center" style="text-decoration: none; color: inherit;">
+                    <div class="service-icon" style="margin: 0 auto 1rem;">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h3>Kimia Kolam</h3>
+                    <p>6 Artikel</p>
+                </a>
+                
+                <a href="#" class="service-card text-center" style="text-decoration: none; color: inherit;">
+                    <div class="service-icon" style="margin: 0 auto 1rem;">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h3>Equipment</h3>
+                    <p>10 Artikel</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section" style="background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: white;">
+        <div class="container">
+            <div class="text-center">
+                <h2 style="color: white;">Punya Pertanyaan?</h2>
+                <p style="opacity: 0.9; max-width: 600px; margin: 0 auto 2rem;">Tim ahli kami siap membantu menjawab pertanyaan seputar perawatan kolam renang Anda.</p>
+                <a href="contact.html" class="btn btn-primary btn-lg" style="background: white; color: var(--primary);">
+                    <i class="fas fa-comments"></i> Tanya Ahli Kami
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-swimming-pool"></i>
+                        </div>
+                        <span class="logo-text">Dokter Pool</span>
+                    </a>
+                    <p>Ahli perawatan kolam renang profesional dengan pengalaman lebih dari 10 tahun.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com/dokterpool" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://instagram.com/dokterpool" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://youtube.com/dokterpool" target="_blank"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-links-col">
+                    <h4>Tautan Cepat</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Beranda</a></li>
+                        <li><a href="services.html">Layanan</a></li>
+                        <li><a href="gallery.html">Galeri</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="about.html">Tentang Kami</a></li>
+                        <li><a href="contact.html">Kontak</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links-col">
+                    <h4>Layanan Kami</h4>
+                    <ul class="footer-links">
+                        <li><a href="services.html">Perawatan Rutin</a></li>
+                        <li><a href="services.html">Renovasi Kolam</a></li>
+                        <li><a href="services.html">Instalasi Baru</a></li>
+                        <li><a href="services.html">Perbaikan Equipment</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>Hubungi Kami</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Jl. Sudirman No. 123, Jakarta</p>
+                    <p><i class="fas fa-phone"></i> +62 21 1234 5678</p>
+                    <p><i class="fas fa-envelope"></i> info@dokterpool.com</p>
+                    <p><i class="fab fa-whatsapp"></i> +62 812 3456 7890</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Dokter Pool. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/js/script.js"></script>
+    <script>
+        // Newsletter form
+        document.getElementById('newsletterForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Terima kasih telah berlangganan newsletter kami!');
+            this.reset();
+        });
+    </script>
+</body>
+</html>

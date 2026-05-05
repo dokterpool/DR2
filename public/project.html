@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Detail proyek kolam renang Dokter Pool. Lihat hasil kerja profesional kami.">
+    
+    <link rel="canonical" href="" id="canonicalUrl">
+    
+    <meta property="og:title" content="" id="ogTitle">
+    <meta property="og:description" content="" id="ogDesc">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="" id="ogUrl">
+    <meta property="og:image" content="" id="ogImage">
+    
+    <script type="application/ld+json" id="projectSchema"></script>
+    
+    <title>Proyek - Dokter Pool</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <style>
+        .project-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .project-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--gray);
+        }
+        
+        .project-description h2 {
+            color: var(--primary-dark);
+            margin-top: 2rem;
+        }
+        
+        .project-description p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .project-gallery-slider {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 1rem 0;
+            scrollbar-width: none;
+        }
+        
+        .project-gallery-slider::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .project-gallery-item {
+            flex: 0 0 300px;
+            scroll-snap-align: start;
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .project-gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .project-gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .project-specs {
+            background: var(--gray-light);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+        }
+        
+        .project-specs h3 {
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+        }
+        
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .spec-item:last-child {
+            border-bottom: none;
+        }
+        
+        .spec-label {
+            color: var(--gray);
+            font-weight: 500;
+        }
+        
+        .spec-value {
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+            color: white;
+        }
+        
+        @media (max-width: 992px) {
+            .project-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-swimming-pool"></i>
+                </div>
+                <span>Dokter Pool</span>
+            </a>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="services.html">Layanan</a></li>
+                <li><a href="gallery.html">Galeri</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="about.html">Tentang</a></li>
+                <li><a href="contact.html">Kontak</a></li>
+            </ul>
+            
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <section class="project-hero" id="projectHero">
+        <img src="" alt="" id="heroImage" loading="eager">
+        <div class="project-hero-overlay">
+            <div class="container">
+                <nav class="breadcrumb">
+                    <a href="index.html">Beranda</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <a href="gallery.html">Galeri</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-current" id="breadcrumbTitle">Proyek</span>
+                </nav>
+                <h1 id="projectTitle">Loading...</h1>
+                <p id="projectLocation"><i class="fas fa-map-marker-alt"></i> Loading...</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="mb-4">
+                <h2 class="mb-3">Galeri Proyek</h2>
+                <div class="project-gallery-slider" id="projectGallery">
+                    <p class="text-center">Memuat galeri...</p>
+                </div>
+            </div>
+            
+            <div class="project-content">
+                <div>
+                    <div class="project-description" id="projectDescription">
+                        <p>Memuat deskripsi proyek...</p>
+                    </div>
+                    
+                    <div id="beforeAfterSection" class="mt-5" style="display: none;">
+                        <h2>Before & After</h2>
+                        <div class="before-after-slider" id="projectBeforeAfter">
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="project-specs">
+                        <h3>Spesifikasi Proyek</h3>
+                        <div id="projectSpecs">
+                            <p>Memuat spesifikasi...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <a href="#" class="btn btn-whatsapp btn-lg" style="width: 100%;" id="waConsultBtn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Konsultasi Serupa
+                        </a>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <a href="gallery.html" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-arrow-left"></i> Kembali ke Galeri
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: white;">
+        <div class="container">
+            <div class="text-center">
+                <h2 style="color: white; margin-bottom: 1rem;">Tertarik dengan Proyek Serupa?</h2>
+                <p style="opacity: 0.9; max-width: 600px; margin: 0 auto 2rem;">Hubungi kami untuk konsultasi gratis dan penawaran harga.</p>
+                <a href="#" class="btn btn-whatsapp btn-lg" id="waBottomBtn" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Chat WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-swimming-pool"></i>
+                        </div>
+                        <span>Dokter Pool</span>
+                    </a>
+                    <p>Ahli perawatan kolam renang profesional dengan pengalaman lebih dari 10 tahun.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com/dokterpool" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://instagram.com/dokterpool" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://youtube.com/dokterpool" target="_blank"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4>Tautan Cepat</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Beranda</a></li>
+                        <li><a href="services.html">Layanan</a></li>
+                        <li><a href="gallery.html">Galeri</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4>Layanan</h4>
+                    <ul class="footer-links">
+                        <li><a href="services.html">Perawatan Rutin</a></li>
+                        <li><a href="services.html">Renovasi</a></li>
+                        <li><a href="services.html">Instalasi</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>Hubungi Kami</h4>
+                    <p><i class="fas fa-phone"></i> +62 21 1234 5678</p>
+                    <p><i class="fab fa-whatsapp"></i> +62 812 3456 7890</p>
+                    <p><i class="fas fa-envelope"></i> info@dokterpool.com</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Dokter Pool. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <a href="#" class="whatsapp-float" id="waFloatBtn" target="_blank" aria-label="Chat WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" id="lightboxClose">&times;</button>
+            <button class="lightbox-nav lightbox-prev" id="lightboxPrev"><i class="fas fa-chevron-left"></i></button>
+            <img src="" alt="" id="lightboxImage">
+            <button class="lightbox-nav lightbox-next" id="lightboxNext"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <script src="/js/script.js"></script>
+    <script>
+        const pathParts = window.location.pathname.split('/');
+        const projectSlug = pathParts[pathParts.length - 1] || pathParts[pathParts.length - 2];
+        
+        let projectImages = [];
+        let currentImageIndex = 0;
+        let whatsappNumber = '6281234567890';
+        
+        async function loadWhatsAppNumber() {
+            try {
+                const response = await fetch('/api/settings');
+                const settings = await response.json();
+                if (settings.company_whatsapp) {
+                    whatsappNumber = settings.company_whatsapp.replace(/\D/g, '');
+                }
+            } catch (e) {}
+        }
+        
+        async function loadProject() {
+            await loadWhatsAppNumber();
+            
+            try {
+                const response = await fetch(`/api/projects/slug/${projectSlug}`);
+                if (!response.ok) throw new Error('Project not found');
+                
+                const project = await response.json();
+                
+                document.title = `${project.title} | Dokter Pool`;
+                document.getElementById('projectTitle').textContent = project.title;
+                document.getElementById('breadcrumbTitle').textContent = project.title;
+                document.getElementById('projectLocation').innerHTML = `
+                    <i class="fas fa-map-marker-alt"></i> ${project.location || 'Jakarta'} 
+                    ${project.year ? `&bull; ${project.year}` : ''}
+                `;
+                
+                const heroImage = project.featured_image || (project.images[0]?.image_path) || 'https://images.unsplash.com/photo-1572331165267-854da2b10ccc?w=1920';
+                document.getElementById('heroImage').src = heroImage;
+                document.getElementById('heroImage').alt = project.title;
+                
+                document.getElementById('canonicalUrl').href = window.location.href;
+                document.getElementById('ogTitle').content = project.title;
+                document.getElementById('ogDesc').content = project.description || project.title;
+                document.getElementById('ogUrl').content = window.location.href;
+                document.getElementById('ogImage').content = heroImage;
+                
+                document.getElementById('projectDescription').innerHTML = `
+                    <p>${project.description || 'Deskripsi proyek tidak tersedia.'}</p>
+                `;
+                
+                let specsHtml = '';
+                if (project.pool_type) {
+                    specsHtml += `
+                        <div class="spec-item">
+                            <span class="spec-label">Tipe Kolam</span>
+                            <span class="spec-value">${project.pool_type}</span>
+                        </div>
+                    `;
+                }
+                if (project.location) {
+                    specsHtml += `
+                        <div class="spec-item">
+                            <span class="spec-label">Lokasi</span>
+                            <span class="spec-value">${project.location}</span>
+                        </div>
+                    `;
+                }
+                if (project.year) {
+                    specsHtml += `
+                        <div class="spec-item">
+                            <span class="spec-label">Tahun</span>
+                            <span class="spec-value">${project.year}</span>
+                        </div>
+                    `;
+                }
+                
+                if (project.specifications) {
+                    try {
+                        const specs = JSON.parse(project.specifications);
+                        for (const [key, value] of Object.entries(specs)) {
+                            specsHtml += `
+                                <div class="spec-item">
+                                    <span class="spec-label">${key}</span>
+                                    <span class="spec-value">${value}</span>
+                                </div>
+                            `;
+                        }
+                    } catch (e) {}
+                }
+                
+                document.getElementById('projectSpecs').innerHTML = specsHtml || '<p>Spesifikasi tidak tersedia</p>';
+                
+                projectImages = project.images || [];
+                const galleryContainer = document.getElementById('projectGallery');
+                
+                if (projectImages.length > 0) {
+                    galleryContainer.innerHTML = projectImages.map((img, index) => `
+                        <div class="project-gallery-item" onclick="openLightbox(${index})">
+                            <img src="${img.image_path}" alt="${img.caption || project.title}" loading="lazy">
+                        </div>
+                    `).join('');
+                } else {
+                    galleryContainer.innerHTML = '<p class="text-center">Tidak ada gambar tambahan</p>';
+                }
+                
+                if (project.has_before_after && (project.beforeImages.length > 0 || project.afterImages.length > 0)) {
+                    document.getElementById('beforeAfterSection').style.display = 'block';
+                    const beforeImg = project.beforeImages[0]?.image_path || projectImages[0]?.image_path;
+                    const afterImg = project.afterImages[0]?.image_path || projectImages[1]?.image_path || projectImages[0]?.image_path;
+                    
+                    document.getElementById('projectBeforeAfter').innerHTML = `
+                        <img src="${beforeImg}" alt="Before" class="before-image" loading="lazy">
+                        <img src="${afterImg}" alt="After" class="after-image" loading="lazy">
+                        <div class="slider-handle" id="sliderHandle">
+                            <div class="slider-button">
+                                <i class="fas fa-arrows-alt-h"></i>
+                            </div>
+                        </div>
+                        <span class="before-label">BEFORE</span>
+                        <span class="after-label">AFTER</span>
+                    `;
+                    
+                    initBeforeAfterSlider();
+                }
+                
+                const waMessage = `Halo Dokter Pool! Saya tertarik dengan proyek ${project.title}. Bisa konsultasi?`;
+                const waUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(waMessage)}`;
+                document.getElementById('waConsultBtn').href = waUrl;
+                document.getElementById('waBottomBtn').href = waUrl;
+                document.getElementById('waFloatBtn').href = waUrl;
+                
+                const schema = {
+                    "@context": "https://schema.org",
+                    "@type": "CreativeWork",
+                    "name": project.title,
+                    "description": project.description,
+                    "image": heroImage,
+                    "url": window.location.href,
+                    "locationCreated": {
+                        "@type": "Place",
+                        "name": project.location
+                    },
+                    "dateCreated": project.year ? `${project.year}` : undefined
+                };
+                document.getElementById('projectSchema').textContent = JSON.stringify(schema);
+                
+            } catch (error) {
+                console.error('Error loading project:', error);
+                document.getElementById('projectTitle').textContent = 'Proyek Tidak Ditemukan';
+                document.getElementById('projectDescription').innerHTML = '<p>Maaf, proyek yang Anda cari tidak ditemukan.</p>';
+                document.getElementById('projectGallery').innerHTML = '';
+                document.getElementById('projectSpecs').innerHTML = '';
+            }
+        }
+        
+        function initBeforeAfterSlider() {
+            const slider = document.getElementById('projectBeforeAfter');
+            const handle = document.getElementById('sliderHandle');
+            const afterImage = slider.querySelector('.after-image');
+            let isDragging = false;
+            
+            function updateSlider(x) {
+                const rect = slider.getBoundingClientRect();
+                let percentage = ((x - rect.left) / rect.width) * 100;
+                percentage = Math.max(0, Math.min(100, percentage));
+                
+                handle.style.left = percentage + '%';
+                afterImage.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+            }
+            
+            handle.addEventListener('mousedown', () => isDragging = true);
+            document.addEventListener('mouseup', () => isDragging = false);
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) updateSlider(e.clientX);
+            });
+            
+            handle.addEventListener('touchstart', () => isDragging = true);
+            document.addEventListener('touchend', () => isDragging = false);
+            document.addEventListener('touchmove', (e) => {
+                if (isDragging) updateSlider(e.touches[0].clientX);
+            });
+            
+            slider.addEventListener('click', (e) => {
+                updateSlider(e.clientX);
+            });
+        }
+        
+        function openLightbox(index) {
+            currentImageIndex = index;
+            updateLightboxImage();
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        function updateLightboxImage() {
+            const img = projectImages[currentImageIndex];
+            document.getElementById('lightboxImage').src = img.image_path;
+            document.getElementById('lightboxImage').alt = img.caption || '';
+        }
+        
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % projectImages.length;
+            updateLightboxImage();
+        }
+        
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + projectImages.length) % projectImages.length;
+            updateLightboxImage();
+        }
+        
+        document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+        document.getElementById('lightboxNext').addEventListener('click', nextImage);
+        document.getElementById('lightboxPrev').addEventListener('click', prevImage);
+        
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeLightbox();
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('lightbox').classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') prevImage();
+        });
+        
+        document.addEventListener('DOMContentLoaded', loadProject);
+    </script>
+</body>
+</html>
